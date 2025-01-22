@@ -1,4 +1,5 @@
 import { WasteItem, WasteResponse } from '../models/WasteItem';
+import { getWasteIcon } from '@/utils/wasteIcons';
 
 /**
  * Sends the image data URL to the backend for processing.
@@ -24,9 +25,19 @@ export const sendImageToBackend = async (imageDataUrl: string): Promise<WasteIte
     }
 
     const responseData: WasteResponse = await response.json();
-    return responseData;
+
+    // Map items and rename "icon:" to "icon"
+    const itemsWithIcons = Array.isArray(responseData)
+      ? responseData.map(({ "icon:": icon, ...rest }) => ({
+          ...rest,
+          icon: getWasteIcon(icon),  // Correctly map icon field
+        }))
+      : [{ ...responseData, icon: getWasteIcon(responseData["icon:"]) }];
+
+    return itemsWithIcons;
   } catch (error) {
     console.error('Error sending image to backend:', error);
     throw error;
   }
 };
+
