@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Alert, ScrollView } from 'react-native';
+import { View, StyleSheet, Alert, ScrollView, ActivityIndicator } from 'react-native';
 import ImagePickerComponent from '../components/ImagePickerComponent';
 import DisplayInfoCard from '../components/DisplayInfoCard';
 import MoreInfoCard from '../components/MoreInfoCard';
@@ -10,12 +10,15 @@ import { WasteItem } from '../models/WasteItem';
 export default function HomeScreen() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [wasteItems, setWasteItems] = useState<WasteItem[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleSendImage = async () => {
     if (!selectedImage) {
       Alert.alert('No image selected', 'Please pick an image first.');
       return;
     }
+
+    setLoading(true);  // Start loading animation
 
     try {
       const responseItems = await sendImageToBackend(selectedImage);
@@ -27,6 +30,8 @@ export default function HomeScreen() {
       }
     } catch (error) {
       Alert.alert('Error', 'Failed to upload image.');
+    } finally {
+      setLoading(false);  // Stop loading animation
     }
   };
 
@@ -58,23 +63,30 @@ export default function HomeScreen() {
       )}
 
       <View style={styles.buttonContainer}>
-        <CustomButton title="Clear" onPress={handleClearAll} style={styles.button} disabled={!selectedImage} />
-        <CustomButton title="Send" onPress={handleSendImage} style={styles.button} disabled={!selectedImage} />
+        <CustomButton title="Clear" onPress={handleClearAll} style={styles.button} disabled={!selectedImage || loading} />
+        <CustomButton title="Send" onPress={handleSendImage} style={styles.button} disabled={!selectedImage || loading} />
       </View>
+
+      {loading && (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#6D4C41" />
+        </View>
+      )}
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flexGrow: 1,
+    padding: 20,
+  },
   instructionsCard: {
     width: '100%',
     backgroundColor: '#DDE8D9',
     borderRadius: 10,
     padding: 15,
     marginTop: 20,
-  },
-  infoContainer: {
-    marginBottom: 15,
   },
   moreInfoContainer: {
     marginTop: 10,
@@ -92,8 +104,8 @@ const styles = StyleSheet.create({
     width: '45%',
     paddingVertical: 12,
   },
-  disabledButton: {
-    backgroundColor: '#A9A9A9',
+  loadingContainer: {
+    marginTop: 20,
+    alignItems: 'center',
   },
 });
-
