@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import { WasteItem } from '@/models/WasteItem';
 
 interface DisplayInfoCardProps {
@@ -19,6 +19,15 @@ const calculateMedian = (values: number[]): number => {
     return sortedValues[middle];
   }
 };
+
+const getIcon = (iconName: string) => {
+  try{
+    return require(`../assets/icons/${iconName}.png`);
+  }
+  catch(error){
+    return require(`../assets/icons/icon_andere.png`);
+  }
+}
 
 const DisplayInfoCard: React.FC<DisplayInfoCardProps> = ({ wasteItems }) => {
   if (!wasteItems || wasteItems.length === 0) {
@@ -44,6 +53,7 @@ const DisplayInfoCard: React.FC<DisplayInfoCardProps> = ({ wasteItems }) => {
           <Text style={styles.infoText}>
             <Text style={styles.bold}>Bin:</Text> {item.short_explanation || 'N/A'}
           </Text>
+          <Image source={getIcon(item.icon)} style={{ width: 30, height: 30 }} />
         </View>
       ))}
       <View style={styles.statsContainer}>
