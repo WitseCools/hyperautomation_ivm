@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { Platform,View, StyleSheet } from 'react-native';
 import CustomButton from './Button';  // Import the custom button
 import useImagePicker from '../hooks/useImagePicker';
 
@@ -8,11 +8,12 @@ function ImagePickerButton({ onImagePicked }) {
 
   return (
     <View style={styles.buttonContainer}>
-      <CustomButton 
-        title="Select picture" 
-        onPress={pickImage} 
-        style={styles.button}
-      />
+<CustomButton 
+  title={Platform.OS === 'web' ? "Select Picture" : "Take Picture"} 
+  onPress={pickImage} 
+  style={styles.button}
+/>
+
     </View>
   );
 }

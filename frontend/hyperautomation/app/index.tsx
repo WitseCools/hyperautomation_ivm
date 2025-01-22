@@ -18,7 +18,7 @@ export default function HomeScreen() {
       return;
     }
 
-    setLoading(true);  // Start loading animation
+    setLoading(true);
 
     try {
       const responseItems = await sendImageToBackend(selectedImage);
@@ -31,7 +31,7 @@ export default function HomeScreen() {
     } catch (error) {
       Alert.alert('Error', 'Failed to upload image.');
     } finally {
-      setLoading(false);  // Stop loading animation
+      setLoading(false);
     }
   };
 
