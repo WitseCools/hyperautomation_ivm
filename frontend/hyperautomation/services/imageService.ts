@@ -7,7 +7,7 @@ import { WasteItem, WasteResponse } from '../models/WasteItem';
  */
 
 const API_URL_MOBILE = 'http://YOUR_IP:5000/describe_image';
-const API_URL_WEB = 'http://127.0.0.1:5000/describe_image';
+const API_URL_WEB = 'http://127.0.0.1:5000/describe_image'; 
 
 export const sendImageToBackend = async (imageDataUrl: string): Promise<WasteItem[]> => {
   try {
