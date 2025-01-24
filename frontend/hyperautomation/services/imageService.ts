@@ -1,3 +1,4 @@
+import { Platform } from 'react-native';
 import { WasteItem, WasteResponse } from '../models/WasteItem';
 import { getWasteIcon } from '@/utils/wasteIcons';
 
@@ -6,13 +7,15 @@ import { getWasteIcon } from '@/utils/wasteIcons';
  * @param {string} imageDataUrl - The image data URL string.
  * @returns {Promise<WasteItem[]>} - A Promise resolving to an array of waste items.
  */
-
-const API_URL_MOBILE = 'http://YOUR_IP:5000/describe_image';
-const API_URL_WEB = 'http://127.0.0.1:5000/describe_image'; 
-
 export const sendImageToBackend = async (imageDataUrl: string): Promise<WasteItem[]> => {
+  // Determine the correct API URL based on platform
+  const API_URL =
+    Platform.OS === 'ios' || Platform.OS === 'android'
+      ? 'http://YOUR_IP:5000/describe_image'  // Mobile (iOS/Android)
+      : 'http://127.0.0.1:5000/describe_image'; // Web/Desktop
+
   try {
-    const response = await fetch(API_URL_MOBILE, {
+    const response = await fetch(API_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -40,4 +43,3 @@ export const sendImageToBackend = async (imageDataUrl: string): Promise<WasteIte
     throw error;
   }
 };
-

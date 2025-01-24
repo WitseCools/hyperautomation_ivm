@@ -4,7 +4,7 @@ from .utils import read_prompt_from_file
 
 endpoint = os.getenv("ENDPOINT_URL", "https://oai-chatbot-dev-se.openai.azure.com/")
 deployment = os.getenv("DEPLOYMENT_NAME", "gpt-4o")
-subscription_key = os.getenv("AZURE_OPENAI_API_KEY", "")
+subscription_key = os.getenv("AZURE_OPENAI_API_KEY", "") 
 
 client = AzureOpenAI(
     azure_endpoint=endpoint,
