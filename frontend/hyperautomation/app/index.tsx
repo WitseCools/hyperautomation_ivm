@@ -1,20 +1,29 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, Alert, ScrollView, ActivityIndicator } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, Alert, ScrollView, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import { Ionicons } from '@expo/vector-icons';
 import ImagePickerComponent from '../components/ImagePickerComponent';
 import DisplayInfoCard from '../components/DisplayInfoCard';
 import MoreInfoCard from '../components/MoreInfoCard';
 import CustomButton from '../components/Button';
 import { sendImageToBackend } from '../services/imageService';
 import { WasteItem } from '../models/WasteItem';
+import { useRouter } from 'expo-router';
 
-export default function HomeScreen() {
+const HomeScreen: React.FC = () => {
+  const { t, i18n } = useTranslation();
+  const router = useRouter();
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [wasteItems, setWasteItems] = useState<WasteItem[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
+  useEffect(() => {
+    handleClearAll(); 
+  }, [i18n.language]);
+
   const handleSendImage = async () => {
     if (!selectedImage) {
-      Alert.alert('No image selected', 'Please pick an image first.');
+      Alert.alert(t('noImage'), t('pickImage'));
       return;
     }
 
@@ -25,11 +34,11 @@ export default function HomeScreen() {
       if (responseItems.length > 0) {
         setWasteItems(responseItems);
       } else {
-        Alert.alert('No valid items received.');
+        Alert.alert(t('noValidItems'));
         setWasteItems([]);
       }
     } catch (error) {
-      Alert.alert('Error', 'Failed to upload image.');
+      Alert.alert(t('uploadError'));
     } finally {
       setLoading(false);
     }
@@ -40,53 +49,75 @@ export default function HomeScreen() {
     setWasteItems([]);
   };
 
+  const handleSettingsPress = () => {
+    router.push('settings');
+  };
+
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <ImagePickerComponent 
-        image={selectedImage} 
-        onImageSelected={setSelectedImage} 
-        onClear={handleClearAll}
-      />
+    <View style={styles.container}>
+      {/* Settings Button */}
+      <TouchableOpacity style={styles.settingsButton} onPress={handleSettingsPress}>
+        <Ionicons name="settings-outline" size={28} color="#4E342E" />
+      </TouchableOpacity>
 
-      <View style={styles.instructionsCard}>
-        {wasteItems.length > 0 ? (
-          <DisplayInfoCard wasteItems={wasteItems} />
-        ) : (
-          <DisplayInfoCard wasteItems={null} />
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <ImagePickerComponent 
+          image={selectedImage} 
+          onImageSelected={setSelectedImage} 
+          onClear={handleClearAll}
+        />
+
+        <View style={styles.instructionsCard}>
+          {wasteItems.length > 0 ? (
+            <DisplayInfoCard wasteItems={wasteItems} />
+          ) : (
+            <DisplayInfoCard wasteItems={null} />
+          )}
+        </View>
+
+        {wasteItems.length > 0 && (
+          <View style={styles.moreInfoContainer}>
+            <MoreInfoCard wasteItems={wasteItems} />
+          </View>
         )}
-      </View>
 
-      {wasteItems.length > 0 && (
-        <View style={styles.moreInfoContainer}>
-          <MoreInfoCard wasteItems={wasteItems} />
+        <View style={styles.buttonContainer}>
+          <CustomButton title="clear" onPress={handleClearAll} style={styles.button} disabled={!selectedImage || loading} />
+          <CustomButton title="send" onPress={handleSendImage} style={styles.button} disabled={!selectedImage || loading} />
         </View>
-      )}
 
-      <View style={styles.buttonContainer}>
-        <CustomButton title="Clear" onPress={handleClearAll} style={styles.button} disabled={!selectedImage || loading} />
-        <CustomButton title="Send" onPress={handleSendImage} style={styles.button} disabled={!selectedImage || loading} />
-      </View>
-
-      {loading && (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#6D4C41" />
-        </View>
-      )}
-    </ScrollView>
+        {loading && (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#6D4C41" />
+          </View>
+        )}
+      </ScrollView>
+    </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
+    flex: 1,
     padding: 20,
+    position: 'relative',
+  },
+  scrollContainer: {
+    flexGrow: 1,
+  },
+  settingsButton: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+    zIndex: 1,
+    padding: 10,
   },
   instructionsCard: {
     width: '100%',
     backgroundColor: '#DDE8D9',
     borderRadius: 10,
     padding: 15,
-    marginTop: 20,
+    marginTop: 60,
   },
   moreInfoContainer: {
     marginTop: 10,
@@ -109,3 +140,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+export default HomeScreen;

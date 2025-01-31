@@ -6,8 +6,5 @@ export interface WasteItem {
   short_explanation: string;
 }
 
-
-  
-  // Response type to handle both single object and array responses
-  export type WasteResponse = WasteItem | WasteItem[];
+export type WasteResponse = WasteItem | WasteItem[];
   

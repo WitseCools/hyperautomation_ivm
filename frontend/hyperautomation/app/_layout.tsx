@@ -1,46 +1,57 @@
+import React from 'react';
 import { Stack } from 'expo-router';
-import { Image, View, StyleSheet } from 'react-native';
+import { Image, StyleSheet } from 'react-native';
 
-export default function RootLayout() {
+export default function Layout() {
   return (
-    <View style={styles.container}>
-      <Stack
-        screenOptions={{
-          headerStyle: styles.header,
-          headerTintColor: '#4E342E',
-          headerTitleStyle: styles.headerTitle,
-          headerTitleAlign: 'center',
-          headerBackVisible: false,
-          contentStyle: styles.content,  // Apply background styling to content
+    <Stack
+      screenOptions={{
+        headerStyle: styles.header,
+        headerTintColor: '#4E342E',
+        headerTitleStyle: styles.headerTitle,
+        headerTitleAlign: 'center',
+        contentStyle: styles.content,
+      }}
+    >
+      {/* Home Screen Configuration */}
+      <Stack.Screen
+        name="index"
+        options={{
+          title: 'Interafval app',
+          headerRight: () => (
+            <Image
+              source={require('../assets/images/logo.png')}
+              style={styles.logo}
+              resizeMode="contain"
+            />
+          ),
         }}
-      >
-        <Stack.Screen
-          name="index"
-          options={{
-            title: 'Recycle AI',
-            headerRight: () => (
-              <Image
-                source={require('../assets/images/logo.png')}
-                style={styles.logo}
-                resizeMode="contain"
-              />
-            ),
-          }}
-        />
-      </Stack>
-    </View>
+      />
+
+      {/* Settings Screen Configuration */}
+      <Stack.Screen
+        name="settings"
+        options={{
+          title: '',
+          headerRight: () => (
+            <Image
+              source={require('../assets/images/logo.png')}
+              style={styles.logo}
+              resizeMode="contain"
+            />
+          ),
+          headerBackVisible: true,
+        }}
+      />
+    </Stack>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#E0E0E0', // Grey background applied to the entire app
-  },
   header: {
-    backgroundColor: '#FFFFFF', // White header background
-    elevation: 5, 
-    shadowColor: '#000', 
+    backgroundColor: '#FFFFFF',
+    elevation: 5,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
@@ -58,9 +69,7 @@ const styles = StyleSheet.create({
     marginRight: 15,
   },
   content: {
-    backgroundColor: '#E0E0E0',  // Grey background inside screen content
+    backgroundColor: '#E0E0E0',
     flex: 1,
-    paddingHorizontal: 0,  // Remove padding to avoid extra spacing
-    paddingVertical: 0,
   },
 });

@@ -1,7 +1,10 @@
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
+import { TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
-const CustomButton = ({ title, onPress, style , disabled }) => {
+const CustomButton = ({ title, onPress, style, disabled }) => {
+  const { t } = useTranslation();
+
   return (
     <TouchableOpacity 
       onPress={onPress} 
@@ -9,7 +12,7 @@ const CustomButton = ({ title, onPress, style , disabled }) => {
       disabled={disabled}
     >
       <Text style={[styles.buttonText, disabled && styles.disabledText]}>
-        {title}
+        {t(title)}
       </Text>
     </TouchableOpacity>
   );
@@ -17,25 +20,25 @@ const CustomButton = ({ title, onPress, style , disabled }) => {
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: '#5C4433',  // Brownish color to match the button
+    backgroundColor: '#5C4433',
     paddingVertical: 12,
     paddingHorizontal: 30,
-    borderRadius: 20,  // Rounded corners
+    borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 3,
-    elevation: 5,  // Android shadow effect
+    elevation: 5,
   },
   buttonText: {
-    color: 'white',  // White text color
+    color: 'white',
     fontSize: 12,
     fontWeight: 'bold',
   },
   disabledText: {
-    color: '#ccc',  // Light grey text when disabled
+    color: '#ccc',
   },
 });
 

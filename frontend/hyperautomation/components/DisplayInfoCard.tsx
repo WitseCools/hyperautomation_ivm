@@ -1,31 +1,34 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import { WasteItem } from '@/models/WasteItem';
+import { useTranslation } from 'react-i18next';
 
 interface DisplayInfoCardProps {
   wasteItems?: WasteItem[] | null;
 }
 
 const DisplayInfoCard: React.FC<DisplayInfoCardProps> = ({ wasteItems }) => {
+  const { t } = useTranslation();
+
   if (!wasteItems || wasteItems.length === 0) {
     return (
       <View style={styles.card}>
-        <Text style={styles.placeholderText}>Nothing to show yet</Text>
+        <Text style={styles.placeholderText}>{t('nothingToShow')}</Text>
       </View>
     );
   }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.instructionsTitle}>Instructions</Text>
+      <Text style={styles.instructionsTitle}>{t('instructions')}</Text>
       {wasteItems.map((item, index) => (
         <View key={index} style={styles.card}>
           <Text style={styles.infoText}>
-            <Text style={styles.bold}>Item:</Text> {item.name || 'N/A'}
+            <Text style={styles.bold}>{t('item')}:</Text> {item.name || 'N/A'}
           </Text>
           <View style={styles.row}>
             <Text style={styles.infoText}>
-              <Text style={styles.bold}>Bin:</Text> {item.short_explanation || 'N/A'}
+              <Text style={styles.bold}>{t('bin')}:</Text> {item.short_explanation || 'N/A'}
             </Text>
             {item.icon && <Image source={item.icon} style={styles.icon} />}
           </View>

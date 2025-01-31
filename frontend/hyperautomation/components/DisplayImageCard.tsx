@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 
 interface DisplayImageCardProps {
   imageUri: string;
@@ -8,12 +9,14 @@ interface DisplayImageCardProps {
 }
 
 const DisplayImageCard: React.FC<DisplayImageCardProps> = ({ imageUri, onClear }) => {
+  const { t } = useTranslation();
+
   return (
     <View style={styles.card}>
       <TouchableOpacity 
         style={styles.clearButton} 
         onPress={onClear} 
-        accessibilityLabel="Delete image"
+        accessibilityLabel={t('deleteImage')}
       >
         <MaterialIcons name="delete" size={24} color="#000" />
       </TouchableOpacity>

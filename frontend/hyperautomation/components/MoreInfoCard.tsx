@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 interface MoreInfoCardProps {
   wasteItems: { name: string; long_explanation: string }[];
@@ -7,12 +8,13 @@ interface MoreInfoCardProps {
 
 const MoreInfoCard: React.FC<MoreInfoCardProps> = ({ wasteItems }) => {
   const [expanded, setExpanded] = useState(false);
+  const { t } = useTranslation();
 
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={() => setExpanded(!expanded)}>
         <Text style={styles.moreInfoText}>
-          {expanded ? "Hide more information" : "More info"}
+          {expanded ? t('hideMoreInfo') : t('moreInfo')}
         </Text>
       </TouchableOpacity>
 
