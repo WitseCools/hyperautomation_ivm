@@ -8,7 +8,7 @@ class WasteItem:
 
     def serialize(self):
         return {
-            'icon:': self.icon,
+            'icon': self.icon,
             'name': self.name,
             'short_explanation': self.short_explanation,
             'long_explanation': self.long_explanation,

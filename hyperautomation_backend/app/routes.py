@@ -7,9 +7,11 @@ def init_routes(app):
         data = request.get_json()
         if not data or 'image_data_url' not in data:
             return jsonify({'error': 'No image data URL provided'}), 400
+        
+        language = data.get('language')
 
         try:
-            serialized_items = process_image(data['image_data_url'])
+            serialized_items = process_image(data['image_data_url'], language)
             return jsonify(serialized_items)
         except ValueError as e:
             return jsonify({'error': str(e)}), 500

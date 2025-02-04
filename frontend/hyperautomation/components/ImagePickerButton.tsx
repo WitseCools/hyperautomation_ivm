@@ -1,19 +1,20 @@
 import React from 'react';
-import { Platform,View, StyleSheet } from 'react-native';
-import CustomButton from './Button';  // Import the custom button
+import { Platform, View, StyleSheet } from 'react-native';
+import CustomButton from './Button';  
 import useImagePicker from '../hooks/useImagePicker';
+import { useTranslation } from 'react-i18next';
 
 function ImagePickerButton({ onImagePicked }) {
+  const { t } = useTranslation();
   const pickImage = useImagePicker(onImagePicked);
 
   return (
     <View style={styles.buttonContainer}>
-<CustomButton 
-  title={Platform.OS === 'web' ? "Select Picture" : "Take Picture"} 
-  onPress={pickImage} 
-  style={styles.button}
-/>
-
+      <CustomButton 
+        title={Platform.OS === 'web' ? t('selectPicture') : t('takePicture')} 
+        onPress={pickImage} 
+        style={styles.button}
+      />
     </View>
   );
 }
@@ -21,8 +22,8 @@ function ImagePickerButton({ onImagePicked }) {
 const styles = StyleSheet.create({
   buttonContainer: {
     flex: 1,
-    justifyContent: 'center',  // Center vertically
-    alignItems: 'center',  // Center horizontally
+    justifyContent: 'center',  
+    alignItems: 'center',  
   },
   button: {
     backgroundColor: '#6D4C41',
@@ -30,9 +31,6 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     width: 200, 
     height: 50,
-  },
-  buttonText: {
-    fontSize: 1,  // Correct font size applied via prop
   },
 });
 
