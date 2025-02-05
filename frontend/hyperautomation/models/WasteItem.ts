@@ -1,10 +1,10 @@
 export interface WasteItem {
   certainty: string;
-  "icon:": string; 
+  icon: string; 
   long_explanation: string;
   name: string;
   short_explanation: string;
+  bin: string; 
 }
 
 export type WasteResponse = WasteItem | WasteItem[];
-  

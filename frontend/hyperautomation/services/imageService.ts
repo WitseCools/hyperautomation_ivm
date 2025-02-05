@@ -1,6 +1,5 @@
 import { Platform } from 'react-native';
 import { WasteItem, WasteResponse } from '../models/WasteItem';
-import { getWasteIcon } from '@/utils/wasteIcons';
 import i18n from '../app/i18n';
 
 /**
@@ -11,7 +10,7 @@ import i18n from '../app/i18n';
 export const sendImageToBackend = async (imageDataUrl: string): Promise<WasteItem[]> => {
   const API_URL =
     Platform.OS === 'ios' || Platform.OS === 'android'
-      ? 'http://192.168.4.65:5000/describe_image'
+      ? 'http://192.168.4.66:5000/describe_image'
       : 'http://127.0.0.1:5000/describe_image';
 
   try {
@@ -22,7 +21,7 @@ export const sendImageToBackend = async (imageDataUrl: string): Promise<WasteIte
       },
       body: JSON.stringify({
         image_data_url: imageDataUrl,
-        language: i18n.language, 
+        language: i18n.language,
       }),
     });
 
@@ -30,16 +29,12 @@ export const sendImageToBackend = async (imageDataUrl: string): Promise<WasteIte
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
-    const responseData: WasteResponse = await response.json();
+    const responseData: WasteResponse[] = await response.json();
 
-    return Array.isArray(responseData)
-      ? responseData.map((item) => ({
-          ...item,
-          icon: getWasteIcon(item.icon),
-        }))
-      : [{ ...responseData, icon: getWasteIcon(responseData.icon) }];
+    return responseData.map((item) => ({ ...item }));
   } catch (error) {
     console.error('Error sending image to backend:', error);
     throw error;
   }
 };
+
