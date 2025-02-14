@@ -16,6 +16,7 @@ def send_to_openai(image_data_url, language):
     print("taal", language)
     prompt_file_path = get_prompt_file_path(language)
     base_prompt = read_prompt_from_file(prompt_file_path)
+    print("image data:", image_data_url)
     print("path:" , prompt_file_path)
     prompt_text = f"{base_prompt}"
 

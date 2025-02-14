@@ -1,10 +1,11 @@
 class WasteItem:
-    def __init__(self, icon,name, shortExplanation, longExplanation, certainty):
+    def __init__(self, icon,name, shortExplanation, longExplanation, certainty, bin):
         self.name = name
         self.short_explanation = shortExplanation
         self.long_explanation = longExplanation
         self.certainty = certainty
         self.icon = icon
+        self.bin= bin
 
     def serialize(self):
         return {
@@ -12,5 +13,6 @@ class WasteItem:
             'name': self.name,
             'short_explanation': self.short_explanation,
             'long_explanation': self.long_explanation,
-            'certainty': self.certainty
+            'certainty': self.certainty,
+            'bin': self.bin
         }
